@@ -2,7 +2,11 @@
 
 https://freshmoji.deno.dev/
 
-# Usage
+## What does it do
+
+Search emojis by text and click on it to copy it onto the clipboard.
+
+## Usage
 
 Using the browser:
 ```bash
