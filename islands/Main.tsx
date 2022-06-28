@@ -5,7 +5,7 @@ import { tw } from "twind";
 import { Emoji } from "https://deno.land/x/emoji@0.2.1/types.ts";
 
 const Search = ({ setInput }: { setInput: (input: string) => void }) => {
-  const inputStyle = tw`form-control
+  const inputStyle = tw`form-control placeholder-black::placeholder
         block
         w-full
         px-3
@@ -14,7 +14,7 @@ const Search = ({ setInput }: { setInput: (input: string) => void }) => {
         font-normal
         text-gray-700
         bg-white bg-clip-padding
-        border border-solid border-gray-300
+        border border-solid border-black-500
         rounded
         transition
         ease-in-out
@@ -23,6 +23,7 @@ const Search = ({ setInput }: { setInput: (input: string) => void }) => {
   return (
     <div class={tw`m-5`}>
       <input
+        placeholder="search for emoji"
         class={inputStyle}
         onInput={(e) => {
           setInput((e.target! as HTMLInputElement).value);
@@ -32,7 +33,12 @@ const Search = ({ setInput }: { setInput: (input: string) => void }) => {
   );
 };
 
-const Emojis = ({ filter }: { filter: string }) => {
+const Emojis = (
+  { filter, setShowAlert }: {
+    filter: string;
+    setShowAlert: (showAlert: boolean) => void;
+  },
+) => {
   const [emojis, setEmojis] = useState<Emoji[]>([]);
   useEffect(() => {
     fetch("/api/emojis").then((r) => r.json()).then(setEmojis);
@@ -41,30 +47,48 @@ const Emojis = ({ filter }: { filter: string }) => {
     await navigator.clipboard.writeText(text);
   };
   return (
-    <div class={tw`grid grid-cols-5 gap-4`}>
+    <div class={tw`grid grid-cols-5 gap-4 bg-blue-50 `}>
       {emojis &&
-        emojis.filter((e) => e.aliases.some((a) => a.startsWith(filter))).map((
-          e,
-        ) => (
-          <button
-            onClick={() => {
-              copyToClipBoard(e.emoji);
-            }}
-            class={tw`text-4xl`}
-          >
-            {e.emoji}
-          </button>
-        ))}
+        emojis.filter((e) => e.aliases.some((a) => a.includes(filter)))
+          .map((
+            e,
+          ) => (
+            <button
+              onClick={() => {
+                copyToClipBoard(e.emoji);
+                setTimeout(() => setShowAlert(false), 500);
+                setShowAlert(true);
+              }}
+              class={tw`text-4xl border-red-300 border-2 rounded-2xl `}
+            >
+              {e.emoji}
+            </button>
+          ))}
     </div>
   );
 };
 
+const Alert = ({ showAlert }: { showAlert: boolean }) => {
+  return (
+    <div
+      style={{ display: showAlert ? "" : "none" }}
+      class={tw`font-bold text-red-600 text-lg bg-green-300`}
+    >
+      Copied!
+    </div>
+  );
+};
 export default function Main() {
   const [input, setInput] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+
   return (
-    <div class={tw`grid place-content-center`}>
-      <Search setInput={setInput} />
-      <Emojis filter={input} />
+    <div>
+      <Alert showAlert={showAlert} />
+      <div class={tw`grid place-content-center min-h-screen bg-yellow-200 `}>
+        <Search setInput={setInput} />
+        <Emojis filter={input} setShowAlert={setShowAlert} />
+      </div>
     </div>
   );
 }
