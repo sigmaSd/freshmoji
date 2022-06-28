@@ -72,9 +72,9 @@ const Alert = ({ showAlert }: { showAlert: boolean }) => {
   return (
     <div
       style={{ display: showAlert ? "" : "none" }}
-      class={tw`font-bold text-red-600 text-lg bg-green-300`}
+      class={tw`font-bold text-red-600 text-lg bg-green-300 fixed`}
     >
-      Copied!
+      Copied to clipboard!
     </div>
   );
 };
