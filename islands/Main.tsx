@@ -42,7 +42,7 @@ const Emojis = (
   const [emojis, setEmojis] = useState<Emoji[]>([]);
   useEffect(() => {
     fetch("/api/emojis").then((r) => r.json()).then(setEmojis);
-  });
+  }, []);
   const copyToClipBoard = async (text: string) => {
     await navigator.clipboard.writeText(text);
   };
