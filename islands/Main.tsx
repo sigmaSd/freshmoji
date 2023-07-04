@@ -1,11 +1,8 @@
-/** @jsx h */
-import { h } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import { tw } from "twind";
 import { Emoji } from "https://deno.land/x/emoji@0.2.1/types.ts";
 
 const Search = ({ setInput }: { setInput: (input: string) => void }) => {
-  const inputStyle = tw`form-control placeholder-black::placeholder
+  const inputStyle = `form-control placeholder-black::placeholder
         block
         w-full
         px-3
@@ -21,7 +18,7 @@ const Search = ({ setInput }: { setInput: (input: string) => void }) => {
         m-0
         focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none`;
   return (
-    <div class={tw`m-5`}>
+    <div class="m-5">
       <input
         placeholder="search for emoji"
         class={inputStyle}
@@ -47,7 +44,7 @@ const Emojis = (
     await navigator.clipboard.writeText(text);
   };
   return (
-    <div class={tw`grid grid-cols-5 gap-4 bg-blue-50 `}>
+    <div class="grid grid-cols-5 gap-4 bg-blue-50">
       {emojis &&
         emojis.filter((e) => e.aliases.some((a) => a.includes(filter)))
           .map((
@@ -59,7 +56,7 @@ const Emojis = (
                 setTimeout(() => setShowAlert(false), 500);
                 setShowAlert(true);
               }}
-              class={tw`text-4xl border-red-300 border-2 rounded-2xl `}
+              class="text-4xl border-red-300 border-2 rounded-2xl"
             >
               {e.emoji}
             </button>
@@ -69,15 +66,17 @@ const Emojis = (
 };
 
 const Alert = ({ showAlert }: { showAlert: boolean }) => {
+  const display = showAlert ? "" : "none";
   return (
     <div
-      style={{ display: showAlert ? "" : "none" }}
-      class={tw`font-bold text-red-600 text-lg bg-green-300 fixed`}
+      style={{ display }}
+      class="font-bold text-red-600 text-lg bg-green-300 fixed"
     >
       Copied to clipboard!
     </div>
   );
 };
+
 export default function Main() {
   const [input, setInput] = useState("");
   const [showAlert, setShowAlert] = useState(false);
@@ -85,7 +84,7 @@ export default function Main() {
   return (
     <div>
       <Alert showAlert={showAlert} />
-      <div class={tw`grid place-content-center min-h-screen bg-yellow-200 `}>
+      <div class="grid place-content-center min-h-screen bg-yellow-200">
         <Search setInput={setInput} />
         <Emojis filter={input} setShowAlert={setShowAlert} />
       </div>

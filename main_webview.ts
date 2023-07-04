@@ -1,4 +1,4 @@
-import { SizeHint, Webview } from "https://deno.land/x/webview@0.7.3/mod.ts";
+import { SizeHint, Webview } from "https://deno.land/x/webview@0.7.4/mod.ts";
 import { dirname, join } from "https://deno.land/std@0.139.0/path/mod.ts";
 
 const worker = new Worker(
